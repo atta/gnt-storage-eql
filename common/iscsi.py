@@ -16,6 +16,10 @@
 # For the known nodes
 # # iscsiadm -m node
 
+
+
+import subprocess
+
 class iSCSI(object):
     
     def __init__(self):
@@ -31,18 +35,32 @@ class iSCSI(object):
         return initiatorname 
     
     def discover(self, ip, prot=3260):
-        # # iscsiadm -m discovery -t sendtargets -p <portalip>
+        cmd = 'iscsiadm -m discovery -t st -p '+ip+':'+str(port)
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in p.stdout.readlines():
+            sys.stdout.write("%s" % line)
         return True
     
     def login(self, iqn):
-        # # iscsiadm -m node --targetname=<targetname> --login
+        cmd='iscsiadm -m node --targetname='+iqn+' --login'
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in p.stdout.readlines():
+            sys.stdout.write("%s" % line)
         return True
         
     def logout(self, iqn):
-        # # iscsiadm -m node --targetname=<targetname> --logout
+        cmd='iscsiadm -m node --targetname='+iqn+' --logout'
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in p.stdout.readlines():
+            sys.stdout.write("%s" % line)
         return True
     
-    def getDevByName(self, iqn, ip, port=3260, lun=0):
-        path='/dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
-        for l in glob.glob(path):
-            print(os.path.realpath(l))
+    def getMultipathDev(self, iqn, ip, port=3260, lun=0):
+        # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
+        cmd = 'multipath -ll | grep $(/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)+')'
+        porcess = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        rsult = re.search('\sdm-\d+\s',p.stdout.readlines()[0])
+        dm = ''.join(['/dev/', x.group().strip()])
+        if '/dev/dm-' in dm:
+            return dm
+        return None
