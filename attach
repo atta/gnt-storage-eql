@@ -1,0 +1,47 @@
+#!/usr/bin/env python2
+#
+# Copyright (C) 2016
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+
+# Based on Ganeti EXtStorageProviders code (https://code.grnet.gr/projects/extstorage)
+
+"""Connect to a new Volume inside a Dell Equallogic 
+This program set access rights for the Ganeti-Node and connects to a iSCSI-Volume.
+It takes it's input from environment variables. Specifically the
+following variables should be present:
+ - VOL_NAME        : The UUID of the new Image file
+
+Return O after successfull connect, 1 on failure
+"""
+
+import sys
+from common import config
+from common import env
+from common import eql
+from common import iscsi
+
+if __name__ == '__main__':
+    conf = config.config()
+    enviroment = env.env()
+
+    eql01 = eql.eql(conf.device_hostname, conf.management_ip, conf.management_user, conf.management_password)
+    eql01.connect() 
+    eql01.volSetAccess(enviroment.get('VOL_NAME'), conf.storage_net, iscsi.getInitiatorname())
+    data = eql01.volShow(enviroment.get('VOL_NAME'))
+    eql01.close()
+
+    iscsi.discover(conf.storage_ip, conf.storage_port)
+    iscsi.login(data['iSCSI Name'])
+    iscsi.getMultipathDev(data['iSCSI Name'], conf.storage_ip, conf.storage_port)
+
+    sys.exit(0)
