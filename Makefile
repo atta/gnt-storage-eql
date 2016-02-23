@@ -1,5 +1,6 @@
 NAME=gnt-storage-eql
-VERSION=0.0.1
+BUILD_SUFFIX    :=$(shell if [ -n "$(BUILD_NUMBER)" ]; then echo "-build$(BUILD_NUMBER)"; else echo ""; fi)
+VERSION         :=$(shell git describe --tags --always|sed 's/^v//g')$(BUILD_SUFFIX)
 DIR=$(NAME)-$(VERSION)
 
 PREFIX=/
