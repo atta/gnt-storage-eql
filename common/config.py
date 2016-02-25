@@ -50,10 +50,10 @@ class config(object):
         if not self.config.read(filename):
             raise ConfigParser.Error("Unable to read config file")
         
-        self.device_hostname=elf.config.get('default', 'device_hostname')
-        self.management_ip=elf.config.get('default', 'management_ip')
-        self.management_user=elf.config.get('default', 'management_user')
-        self.management_password=elf.config.get('default', 'management_password')
-        self.storage_net=elf.config.get('default', 'storage_net')
-        self.storage_ip=elf.config.get('default', 'storage_ip')
-        self.storage_port=elf.config.get('default', 'storage_port')
+        self.device_hostname=self.config.get('default', 'device_hostname')
+        self.management_ip=self.config.get('default', 'management_ip')
+        self.management_user=self.config.get('default', 'management_user')
+        self.management_password=self.config.get('default', 'management_password')
+        self.storage_net=self.config.get('default', 'storage_net')
+        self.storage_ip=self.config.get('default', 'storage_ip')
+        self.storage_port=self.config.get('default', 'storage_port')
