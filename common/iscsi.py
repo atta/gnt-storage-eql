@@ -60,7 +60,8 @@ class iSCSI(object):
     def getMultipathDev(self, iqn, ip, port=3260, lun=0):
         # wait for link
         path='/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
-        while not os.path.exists(path):
+        while not os.path.islink(path):
+            sys.stdout.write("path not found %s" % path)
             time.sleep(0.2)
         
         cmd = '/lib/udev/scsi_id -g '+path
@@ -77,6 +78,7 @@ class iSCSI(object):
                 result = re.search('\sdm-\d+',process.stdout.readlines()[0])
                 dm = ''.join(['/dev/', result.group().strip()])
             except:
+                sys.stdout.write("scsi_id %s no found in multipath" % scsi_id)
                 time.sleep(1)
             
         if '/dev/dm-' in dm:
