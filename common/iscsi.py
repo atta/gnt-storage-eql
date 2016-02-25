@@ -18,9 +18,9 @@
 
 import subprocess
 import sys
+import os
 import re
 import time
-from time import sleep
 
 class iSCSI(object):
     
@@ -59,7 +59,7 @@ class iSCSI(object):
     
     def getMultipathDev(self, iqn, ip, port=3260, lun=0):
         # wait for link
-        path='/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
+        path='/dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
         while not os.path.islink(path):
             sys.stdout.write("path not found %s" % path)
             time.sleep(0.2)
