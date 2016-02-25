@@ -19,6 +19,8 @@
 import subprocess
 import sys
 import re
+import time
+from time import sleep
 
 class iSCSI(object):
     
@@ -56,11 +58,27 @@ class iSCSI(object):
         return True
     
     def getMultipathDev(self, iqn, ip, port=3260, lun=0):
-        # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
-        cmd = 'multipath -ll | grep $(/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)+')'
+        # wait for link
+        path='/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
+        while not os.path.exists(path):
+            time.sleep(0.2)
+        
+        cmd = '/lib/udev/scsi_id -g '+path
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        result = re.search('\sdm-\d+\s',process.stdout.readlines()[0])
-        dm = ''.join(['/dev/', result.group().strip()])
+        scsi_id = process.stdout.readlines()[0]
+        
+        # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
+        cmd = 'multipath -ll | grep -o -e "'+scsi_id+'.*dm-[[:digit:]]\+"'
+        
+        dm = ''
+        while dm == '': 
+            try:
+                process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                result = re.search('\sdm-\d+',process.stdout.readlines()[0])
+                dm = ''.join(['/dev/', result.group().strip()])
+            except:
+                time.sleep(1)
+            
         if '/dev/dm-' in dm:
             return dm
         return None
