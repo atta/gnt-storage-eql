@@ -33,6 +33,7 @@ from common import iscsi
 if __name__ == '__main__':
     conf = config.config()
     enviroment = env.env()
+	iscsi = iscsi.iSCSI()
 
     eql01 = eql.eql(conf.device_hostname, conf.management_ip, conf.management_user, conf.management_password)
     eql01.connect() 
