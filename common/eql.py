@@ -96,7 +96,7 @@ class eql(object):
         # add ACL to a Volume, get a list of all Volume Access-Slots and add it not exists
         for number in self.volGetAccessList(name):
             access = self.volGetAccess(name, number)
-            if access['Initiator'] == initiatorname and access['IPAddress'] == ip:
+            if access != None and access['Initiator'] == initiatorname and access['IPAddress'] == ip:
                 return True
             
         self.run_cmd('volume select gnt-'+name+' access create ipaddress '+ip+' initiator '+initiatorname)
