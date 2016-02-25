@@ -40,7 +40,7 @@ if __name__ == '__main__':
     eql01.volSetAccess(enviroment.get('VOL_NAME'), conf.storage_net, iscsi.getInitiatorname())
     data = eql01.volShow(enviroment.get('VOL_NAME'))
     eql01.close()
-
+    
     iscsi.discover(conf.storage_ip, conf.storage_port)
     iscsi.login(data['iSCSI Name'])
     print(repr([data['iSCSI Name'], conf.storage_ip, conf.storage_port]))
@@ -49,3 +49,4 @@ if __name__ == '__main__':
 	sys.stdout.write("%s" % dm)
 	
     sys.exit(0)
+    
