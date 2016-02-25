@@ -34,7 +34,7 @@ class iSCSI(object):
                 initiatorname = line.split('=')[1].strip()
         return initiatorname 
     
-    def discover(self, ip, prot=3260):
+    def discover(self, ip, port=3260):
         cmd = 'iscsiadm -m discovery -t st -p '+ip+':'+str(port)
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in p.stdout.readlines():
