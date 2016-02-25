@@ -16,9 +16,9 @@
 # For the known nodes
 # # iscsiadm -m node
 
-
-
 import subprocess
+import sys
+import re
 
 class iSCSI(object):
     
@@ -58,9 +58,9 @@ class iSCSI(object):
     def getMultipathDev(self, iqn, ip, port=3260, lun=0):
         # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
         cmd = 'multipath -ll | grep $(/lib/udev/scsi_id -g /dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)+')'
-        porcess = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        rsult = re.search('\sdm-\d+\s',p.stdout.readlines()[0])
-        dm = ''.join(['/dev/', x.group().strip()])
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        result = re.search('\sdm-\d+\s',process.stdout.readlines()[0])
+        dm = ''.join(['/dev/', result.group().strip()])
         if '/dev/dm-' in dm:
             return dm
         return None
