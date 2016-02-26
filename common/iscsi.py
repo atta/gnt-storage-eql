@@ -66,7 +66,7 @@ class iSCSI(object):
         
         cmd = '/lib/udev/scsi_id -g '+path
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        scsi_id = process.stderr.readlines()[0]
+        scsi_id = process.stdout.readlines()[0]
         
         # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
         cmd = 'multipath -ll | grep -o -e "'+scsi_id+'.*dm-[[:digit:]]\+"'
