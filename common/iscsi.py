@@ -48,6 +48,7 @@ class iSCSI(object):
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in p.stdout.readlines():
             sys.stderr.write("%s" % line)
+        p = subprocess.Popen('service multipath-tools reload', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return True
         
     def logout(self, iqn):
@@ -55,6 +56,7 @@ class iSCSI(object):
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in p.stdout.readlines():
             sys.stderr.write("%s" % line)
+        p = subprocess.Popen('service multipath-tools reload', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return True
     
     def getMultipathDev(self, iqn, ip, port=3260, lun=0):
