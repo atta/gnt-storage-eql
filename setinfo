@@ -1,0 +1,29 @@
+#!/usr/bin/env python2
+#
+# Copyright (C) 2016
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+
+# Based on Ganeti EXtStorageProviders code (https://code.grnet.gr/projects/extstorage)
+
+"""Add metadata to an existing Volume inside a Dell Equallogic 
+
+ - VOL_NAME        : The UUID of the new Image file
+ - VOL_METADATA    : metadata
+
+Return O after successfull connect, 1 on failure
+"""
+
+import sys
+
+if __name__ == '__main__':
+    sys.exit(0)

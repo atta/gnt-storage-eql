@@ -15,12 +15,13 @@
 
 # Based on Ganeti EXtStorageProviders code (https://code.grnet.gr/projects/extstorage)
 
-"""Connect to a new Volume inside a Dell Equallogic 
-This program set access rights for the Ganeti-Node and connects to a iSCSI-Volume.
-It takes it's input from environment variables. Specifically the
+"""Grow Volume inside a Dell Equallogic 
+
 following variables should be present:
  - VOL_NAME        : The UUID of the new Image file
-
+ - VOL_SIZE        : The size of the new Image (in megabytes)
+ - VOL_NEW_SIZE    : The new size of the Image (in megabytes)
+ 
 Return O after successfull connect, 1 on failure
 """
 
@@ -28,24 +29,14 @@ import sys
 from common import config
 from common import env
 from common import eql
-from common import iscsi
 
 if __name__ == '__main__':
     conf = config.config()
     enviroment = env.env()
-    iscsi = iscsi.iSCSI()
-	
     eql01 = eql.eql(conf.device_hostname, conf.management_ip, conf.management_user, conf.management_password)
+    
     eql01.connect() 
-    eql01.volSetAccess(enviroment.get('VOL_NAME'), conf.storage_net, iscsi.getInitiatorname())
-    data = eql01.volShow(enviroment.get('VOL_NAME'))
+    data = eql01.volGrow(enviroment.get('VOL_NAME'), enviroment.get('VOL_NEW_SIZE'))
     eql01.close()
-    
-    iscsi.discover(conf.storage_ip, conf.storage_port)
-    iscsi.login(data['iSCSI Name'])
-       
-    dm = iscsi.getMultipathDev(data['iSCSI Name'], conf.storage_ip, conf.storage_port)
-    sys.stdout.write("%s" % dm)
-	
+
     sys.exit(0)
-    

@@ -23,7 +23,12 @@ $(DIR):
 	cp eql.conf "$(DIR)/etc/ganeti/extstorage/eql.conf"
 	cp attach "$(DIR)/usr/share/ganeti/extstorage/eql/"
 	cp create "$(DIR)/usr/share/ganeti/extstorage/eql/"
-	#cp parameters.list "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp detach "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp grow "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp remove "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp setinfo "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp verify "$(DIR)/usr/share/ganeti/extstorage/eql/"
+	cp parameters.list "$(DIR)/usr/share/ganeti/extstorage/eql/"
 
 .PHONY: deb
 deb: $(DIR)
