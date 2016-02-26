@@ -113,12 +113,20 @@ class eql(object):
     def volGetAccess(self, name, number):
         # Get ACL-Settings from a slot
         data={}
-        for info in self.run_cmd('volume select gnt-'+name+' access select '+str(number)+' show')[1:6]:
+        val=''
+        key=''
+        for info in self.run_cmd('volume select gnt-'+name+' access select '+str(number)+' show'):
+            #drop lines with useless informations
+            if info.startswith('--'):
+                continue
+            if info.startswith('__'):
+                continue
             if ': ' in info:
                 key, val = info.split(': ')
                 data[key]=val
             else:
-                data[key]=data[key]+info
+                if data.has_key(key):
+                    data[key]=data[key]+info
         if len(data) == 0:
             return None
         return data
@@ -126,12 +134,29 @@ class eql(object):
     def volShow(self, name):
         # retrive volume informations
         data={}
-        for info in self.run_cmd('volume show gnt-'+name)[1:]:
+        val=''
+        key=''
+        for info in self.run_cmd('volume show gnt-'+name):
+            #drop lines with useless informations
+            if info.startswith('--'):
+                continue
+            if info.startswith('__'):
+                continue
+            if info.startswith('ID '):
+                continue
+            if info.startswith(' '):
+                continue
+            if re.search('^[0-9]+\s+\w',info):
+                continue
+            if info.startswith('Access Policy Group'):
+                continue
+
             if ': ' in info:
                 key, val = info.split(': ')
                 data[key]=val
             else:
-                data[key]=data[key]+info
+                if data.has_key(key):
+                    data[key]=data[key]+info
         if len(data) == 0:
             return None
         return data
