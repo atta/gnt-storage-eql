@@ -108,3 +108,9 @@ SIZE is the new absolute Volumesize in MB
   volume select gnt-<NAME> size <SIZE>
 ```
 
+## Build a Package
+* install fpm ```gem install fpm```
+* run ```make deb```
+
+
+
