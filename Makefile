@@ -34,6 +34,8 @@ $(DIR):
 deb: $(DIR)
 	fpm -s dir -t deb -v $(VERSION) -n $(NAME) \
 		-d "ganeti (>= 2.10.0)" \
+		-d "open-iscsi" \
+		-d "multipath-tools" \
 		-d "python-paramiko" \
 		-a all --prefix $(PREFIX) -C $(DIR) .
 
@@ -41,6 +43,8 @@ deb: $(DIR)
 rpm: $(DIR)
 	fpm -s dir -t rpm -v $(VERSION) -n $(NAME) \
 		-d "ganeti >= 2.10.0" \
+		-d "open-iscsi" \
+		-d "multipath-tools" \
 		-d "python-paramiko" \
 		-a all --prefix $(PREFIX) -C $(DIR) .
 
