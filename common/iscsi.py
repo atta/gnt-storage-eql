@@ -71,6 +71,7 @@ class iSCSI(object):
         scsi_id = process.stdout.read().strip()
         
         if not scsi_id.startswith(id_prefix):
+            sys.stderr.write("scsi_id -g not start with %s" % id_prefix)
             return None
         
         # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
