@@ -75,12 +75,10 @@ class eql(object):
     def volCreate(self, name, size):
         # size in MB, access is done in an extra task
         data = self.run_cmd('volume create gnt-'+name+' '+str(size)+'MB description gnt-'+name+' read-write online iscsi-alias gnt-'+name+' thin-provision')
-        
-        if data[1] == 'Volume creation succeeded.':
-            #return ''.join(data[2:])[len('iSCSI target name is '):-1]
+        result = self.volShow(name)
+        if result != None and result['iSCSI Name'] == name:
             return name
-        if data[1] == '% Error - Volume already exists':
-            return name
+            
         return ''.join(data)
     
     def volGrow(self, name, size):
