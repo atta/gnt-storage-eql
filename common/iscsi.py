@@ -59,7 +59,7 @@ class iSCSI(object):
         p = subprocess.Popen('service multipath-tools reload', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return True
     
-    def getMultipathDev(self, iqn, ip, port=3260, lun=0):
+    def getMultipathDev(self, iqn, ip, port=3260, lun=0, id_prefix='360fff'):
         # wait for link
         path='/dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
         while not os.path.islink(path):
@@ -68,7 +68,10 @@ class iSCSI(object):
         
         cmd = '/lib/udev/scsi_id -g '+path
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        scsi_id = process.stdout.readlines()[0]
+        scsi_id = process.stdout.read().strip()
+        
+        if not scsi_id.startswith(id_prefix):
+            return None
         
         # grep for the scsi_id in the multipath-output and return the devicemapper name dm-<n>
         cmd = 'multipath -ll | grep -o -e "'+scsi_id+'.*dm-[[:digit:]]\+"'
