@@ -76,7 +76,7 @@ class eql(object):
         # size in MB, access is done in an extra task
         data = self.run_cmd('volume create gnt-'+name+' '+str(size)+'MB description gnt-'+name+' read-write online iscsi-alias gnt-'+name+' thin-provision')
         result = self.volShow(name)
-        if result != None and result['iSCSI Name'] == name:
+        if result != None and result['Name'] == 'gnt-'+name:
             return name
             
         return ''.join(data)
