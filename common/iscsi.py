@@ -58,6 +58,12 @@ class iSCSI(object):
             sys.stderr.write("%s" % line)
         p = subprocess.Popen('service multipath-tools reload', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return True
+
+    def rescan(self):
+        # multipathd -k"resize map sdx"
+        cmd = 'iscsiadm -m node -R'
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return True
     
     def getMultipathDev(self, iqn, ip, port=3260, lun=0, id_prefix='360fff'):
         # wait for link
@@ -90,3 +96,12 @@ class iSCSI(object):
         if '/dev/dm-' in dm:
             return dm
         return None
+    
+    def getDev(self, iqn, ip, port=3260, lun=0):
+        # wait for link
+        path='/dev/disk/by-path/ip-'+ip+':'+str(port)+'-iscsi-'+iqn+'-lun-'+str(lun)
+        while not os.path.islink(path):
+            sys.stderr.write("path not found %s" % path)
+            time.sleep(0.2)
+        
+        return os.readlink(path)
