@@ -44,8 +44,9 @@ if __name__ == '__main__':
     iscsi.discover(conf.storage_ip, conf.storage_port)
     iscsi.login(data['iSCSI Name'])
        
-    dm = iscsi.getMultipathDev(data['iSCSI Name'], conf.storage_ip, conf.storage_port)
-    sys.stdout.write("%s" % dm)
+    #dev = iscsi.getMultipathDev(data['iSCSI Name'], conf.storage_ip, conf.storage_port)
+    dev = iscsi.getDev(data['iSCSI Name'], conf.storage_ip, conf.storage_port)
+    sys.stdout.write("%s" % dev)
 	
     sys.exit(0)
     
