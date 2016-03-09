@@ -104,4 +104,4 @@ class iSCSI(object):
             sys.stderr.write("path not found %s" % path)
             time.sleep(0.2)
         
-        return os.readlink(path)
+        return os.path.realpath(path)
