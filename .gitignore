@@ -60,3 +60,11 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#dot files
+.*
+
+#build
+*.deb
+gnt-storage-eql-*
+orig/
