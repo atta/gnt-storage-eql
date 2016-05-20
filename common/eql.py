@@ -98,6 +98,7 @@ class eql(object):
                 return True
             
         self.run_cmd('volume select gnt-'+name+' access create ipaddress '+ip+' initiator '+initiatorname)
+        self.run_cmd('volume select gnt-'+name+' multihost-access enable')
   
     def volGetAccessList(self, name):
         # grep all used ACL-slot numbers and return it as array of slot-numbers
